@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'pedometer_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -6,52 +7,106 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // Deklarasikan dua objek TextEditingController untuk mengelola inputan
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Buat AppBar dengan judul
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          // Atur tata letak vertical menjadi tengah layar
-          mainAxisAlignment: MainAxisAlignment.center,
-          // Atur tata letak horizontal menjadi penuh layar
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Buat TextField untuk input email
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: 100),
+                  Text(
+                    'Welcome to NextStep!',
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 50),
+                  // Email input with label and rounded corners
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                      color: Colors.grey[200],
+                    ),
+                    child: TextField(
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        hintText: 'example@gmail.com',
+                        labelText: 'Your email address',
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Password input with label and rounded corners
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                      color: Colors.grey[200],
+                    ),
+                    child: TextField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        hintText: '********',
+                        labelText: 'Your password',
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Login button with rounded corners
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                      color: Colors.blue,
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PedometerPage(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'LOGIN',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 16.0),
-            // Buat TextField untuk input password
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-              ),
-              obscureText: true,
-            ),
-            SizedBox(height: 16.0),
-            // Buat tombol untuk mengirimkan form login
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Implementasi fungsi login
-                // Navigasi ke halaman pedometer ketika tombol ditekan
-                Navigator.pushReplacementNamed(context, '/pedometer');
-              },
-              child: Text('Login'),
-            ),
-          ],
+          ),
         ),
       ),
     );

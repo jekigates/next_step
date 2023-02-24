@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensors/sensors.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class PedometerPage extends StatefulWidget {
   @override
@@ -11,9 +12,21 @@ class _PedometerPageState extends State<PedometerPage> {
   // Deklarasikan variabel untuk menyimpan jumlah langkah yang diambil
   int _stepsCount = 0;
 
+  // Inisialisasi plugin notifikasi
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
   @override
   void initState() {
     super.initState();
+
+    // Konfigurasi plugin notifikasi
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
     // Dengarkan perubahan accelerometer dan perbarui jumlah langkah ketika langkah terdeteksi
     accelerometerEvents.listen((AccelerometerEvent event) {
       setState(() {
@@ -30,12 +43,23 @@ class _PedometerPageState extends State<PedometerPage> {
       onWillPop: () => _onWillPop(context),
       child: Scaffold(
         // Buat AppBar dengan judul
-        appBar: AppBar(
-          title: Text('Pedometer'),
-        ),
+        appBar: null,
         // Tampilkan jumlah langkah di tengah layar
         body: Center(
-          child: Text('Steps taken: $_stepsCount'),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Steps taken: $_stepsCount'),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  // Panggil method untuk mengirim notifikasi di sini
+                  _sendNotification();
+                },
+                child: Text('Send Notification'),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -63,5 +87,24 @@ class _PedometerPageState extends State<PedometerPage> {
           ),
         ) ??
         false;
+  }
+
+  // Method untuk mengirim notifikasi
+  Future<void> _sendNotification() async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'channel_id',
+      'channel_name',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+    );
+    var platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        0,
+        'Hey!',
+        'Don’t forget to drink during your walking exercise.',
+        platformChannelSpecifics,
+        payload: 'Default_Sound');
   }
 }
