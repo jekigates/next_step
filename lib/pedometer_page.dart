@@ -16,6 +16,9 @@ class _PedometerPageState extends State<PedometerPage> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  // Deklarasikan variabel untuk ukuran lingkaran
+  double _circleSize = 200.0;
+
   @override
   void initState() {
     super.initState();
@@ -32,6 +35,10 @@ class _PedometerPageState extends State<PedometerPage> {
       setState(() {
         if (event.y > 11.0) {
           _stepsCount++;
+          // Check if the number of steps is a multiple of 100
+          if (_stepsCount % 100 == 0) {
+            _sendNotification();
+          }
         }
       });
     });
@@ -49,7 +56,31 @@ class _PedometerPageState extends State<PedometerPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Steps taken: $_stepsCount'),
+              SizedBox(
+                width: _circleSize,
+                height: _circleSize,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.black),
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '$_stepsCount',
+                          style: TextStyle(fontSize: 24),
+                        ),
+                        Text(
+                          'STEP',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
