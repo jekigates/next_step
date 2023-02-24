@@ -87,7 +87,7 @@ class _PedometerPageState extends State<PedometerPage> {
                   // Panggil method untuk mengirim notifikasi di sini
                   _sendNotification();
                 },
-                child: Text('Send Notification'),
+                child: Text('Test Notification'),
               ),
             ],
           ),

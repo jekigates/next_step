@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'pedometer_page.dart';
-import 'register_page.dart';
+import 'login_page.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -25,10 +25,35 @@ class _LoginPageState extends State<LoginPage> {
                 children: <Widget>[
                   SizedBox(height: 100),
                   Text(
-                    'Welcome to NextStep!',
+                    'Register NextStep!',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 50),
+
+                  // Name input with label and rounded corners
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                      color: Colors.grey[200],
+                    ),
+                    child: TextField(
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        hintText: 'Example Name',
+                        labelText: 'Your full name',
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
                   // Email input with label and rounded corners
                   Container(
                     decoration: BoxDecoration(
@@ -99,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       },
                       child: Text(
-                        'LOGIN',
+                        'REGISTER',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -111,12 +136,12 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RegisterPage(),
+                          builder: (context) => LoginPage(),
                         ),
                       );
                     },
                     child: Text(
-                      "Don't have an account? Create one",
+                      "Already have an account? Login",
                       style: TextStyle(
                         color: Colors.blue,
                         decoration: TextDecoration.underline,
