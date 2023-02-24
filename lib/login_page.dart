@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'pedometer_page.dart';
 import 'register_page.dart';
 
@@ -10,6 +11,70 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final auth = FirebaseAuth.instance;
+
+  Future<void> login() async {
+    final String email = emailController.text.trim();
+    final String password = passwordController.text.trim();
+
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter your email'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    if (password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter your password'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    if (password.length < 8) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Password should be at least 8 characters long.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    try {
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => PedometerPage()),
+      );
+      // Successfully signed in user, you can navigate to the home screen here
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('No user found for that email.'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } else if (e.code == 'wrong-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Wrong password provided for that user.'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,12 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PedometerPage(),
-                          ),
-                        );
+                        login();
                       },
                       child: Text(
                         'LOGIN',

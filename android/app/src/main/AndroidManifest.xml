@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.next_step">
+    package="com.jekigates.next_step">
    <application
         android:label="NextStep"
         android:name="${applicationName}"

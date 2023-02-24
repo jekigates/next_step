@@ -1,4 +1,4 @@
-package com.example.next_step
+package com.jekigates.next_step
 
 import io.flutter.embedding.android.FlutterActivity
 

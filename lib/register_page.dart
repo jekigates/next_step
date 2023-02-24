@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'pedometer_page.dart';
 import 'login_page.dart';
 
@@ -8,8 +10,95 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final auth = FirebaseAuth.instance;
+  final firestore = FirebaseFirestore.instance;
+
+  Future<void> register() async {
+    final String email = emailController.text.trim();
+    final String password = passwordController.text.trim();
+    final String name = nameController.text.trim();
+
+    if (name.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter your name'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter your email'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    if (password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter your password'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    if (password.length < 8) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Password should be at least 8 characters long.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      User? user = userCredential.user;
+      if (user != null) {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'name': name,
+          'step': 0,
+          'totalStep': 0,
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PedometerPage()),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('The password provided is too weak.'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } else if (e.code == 'email-already-in-use') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('The account already exists for that email.'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: Colors.grey[200],
                     ),
                     child: TextField(
-                      controller: emailController,
+                      controller: nameController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -116,12 +205,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PedometerPage(),
-                          ),
-                        );
+                        register();
                       },
                       child: Text(
                         'REGISTER',

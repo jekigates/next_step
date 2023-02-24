@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "441455886305",
+    "project_id": "next-step-87245",
+    "storage_bucket": "next-step-87245.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441455886305:android:c1c8a607233653c9d7dca0",
+        "android_client_info": {
+          "package_name": "com.jekigates.next_step"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "441455886305-u3ftdtd0ikdn80u3u75t4r39io7cv55k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCPEfST_48jN9dv7y7KYjjfhrWeoZUQ5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "441455886305-u3ftdtd0ikdn80u3u75t4r39io7cv55k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
