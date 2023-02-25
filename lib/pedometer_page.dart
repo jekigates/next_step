@@ -39,6 +39,7 @@ class _PedometerPageState extends State<PedometerPage> {
       setState(() {
         if (event.y > 11.0) {
           _stepsCount++;
+          _updateUserStepCount();
         }
       });
     });
@@ -65,6 +66,16 @@ class _PedometerPageState extends State<PedometerPage> {
       Future.delayed(Duration.zero, () {
         _showAlert();
       });
+    }
+  }
+
+  void _updateUserStepCount() async {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .update({'step': _stepsCount});
     }
   }
 
