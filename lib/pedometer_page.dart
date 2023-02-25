@@ -76,10 +76,6 @@ class _PedometerPageState extends State<PedometerPage> {
         setState(() {
           _user = user;
         });
-        print('Name: ${userData.get('name')}');
-        print('Email: ${_user!.email}');
-        print('Step: ${userData.get('step')}');
-        print('Total Step: ${userData.get('totalStep')}');
       }
     } else {
       Future.delayed(Duration.zero, () {
@@ -97,16 +93,12 @@ class _PedometerPageState extends State<PedometerPage> {
           .doc(user.uid)
           .get();
       if (userData.exists) {
-        // Get the user's local date
-        final currentDate = DateTime.now();
-        final currentDateString =
-            '${currentDate.year}-${currentDate.month}-${currentDate.day}';
-
-        // Get the user's Firebase date
-        final firebaseDateString = userData.get('currentDate');
+        final currentDate =
+            DateTime.now().toLocal().toString().substring(0, 10);
+        final firebaseDate = userData.get('currentDate');
 
         // Check if the dates are different
-        if (currentDateString != firebaseDateString) {
+        if (firebaseDate != currentDate) {
           // Reset the step count
           _stepsCount = 0;
           await FirebaseFirestore.instance
@@ -114,7 +106,7 @@ class _PedometerPageState extends State<PedometerPage> {
               .doc(user.uid)
               .update({
             'step': 0,
-            'currentDate': currentDateString,
+            'currentDate': currentDate,
           });
           // Show a notification
           Fluttertoast.showToast(
