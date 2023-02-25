@@ -39,10 +39,6 @@ class _PedometerPageState extends State<PedometerPage> {
       setState(() {
         if (event.y > 11.0) {
           _stepsCount++;
-          // Check if the number of steps is a multiple of 100
-          if (_stepsCount % 100 == 0) {
-            _sendNotification();
-          }
         }
       });
     });
@@ -58,6 +54,7 @@ class _PedometerPageState extends State<PedometerPage> {
       if (userData.exists) {
         setState(() {
           _user = user;
+          _stepsCount = userData.get('step');
         });
         print('Name: ${userData.get('name')}');
         print('Email: ${_user!.email}');
