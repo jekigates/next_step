@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'pedometer_page.dart';
-import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -52,10 +50,8 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       );
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => PedometerPage()),
-      );
+      Navigator.pop(context);
+      Navigator.pushNamed(context, '/pedometer');
       // Successfully signed in user, you can navigate to the home screen here
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -168,12 +164,8 @@ class _LoginPageState extends State<LoginPage> {
                   // Text link to register page
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RegisterPage(),
-                        ),
-                      );
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/register');
                     },
                     child: Text(
                       "Don't have an account? Create one",
