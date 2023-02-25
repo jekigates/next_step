@@ -13,6 +13,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordController = TextEditingController();
   final auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
+  bool _obscureText = true;
 
   Future<void> register() async {
     final String email = emailController.text.trim();
@@ -170,23 +171,31 @@ class _RegisterPageState extends State<RegisterPage> {
                   // Password input with label and rounded corners
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      ),
+                      borderRadius: BorderRadius.circular(20),
                       color: Colors.grey[200],
                     ),
                     child: TextField(
                       controller: passwordController,
-                      obscureText: true,
+                      obscureText: _obscureText,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         hintText: '********',
                         labelText: 'Your password',
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                          child: Icon(
+                            _obscureText
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Colors.grey,
+                          ),
+                        ),
                       ),
                     ),
                   ),
