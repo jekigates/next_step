@@ -133,6 +133,40 @@ class _PedometerPageState extends State<PedometerPage> {
                       },
                       child: Text('Test Notification'),
                     ),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Tampilkan dialog konfirmasi logout
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Logout'),
+                              content: Text('Are you sure you want to logout?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('Cancel'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                TextButton(
+                                  child: Text('Logout'),
+                                  onPressed: () async {
+                                    // Logout dari firebase
+                                    await FirebaseAuth.instance.signOut();
+                                    // Redirect ke halaman login
+                                    Navigator.pop(context);
+                                    Navigator.pushNamed(context, '/');
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text('Logout'),
+                    ),
                   ],
                 ),
               )

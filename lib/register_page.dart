@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'pedometer_page.dart';
-import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -74,10 +72,8 @@ class _RegisterPageState extends State<RegisterPage> {
           'step': 0,
           'totalStep': 0,
         });
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => PedometerPage()),
-        );
+        Navigator.pop(context);
+        Navigator.pushNamed(context, '/pedometer');
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -217,12 +213,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   // Text link to register page
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        ),
-                      );
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/login');
                     },
                     child: Text(
                       "Already have an account? Login",
