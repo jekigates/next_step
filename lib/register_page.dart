@@ -67,10 +67,14 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       User? user = userCredential.user;
       if (user != null) {
+        final now = DateTime.now();
+        final date = "${now.year}-${now.month}-${now.day}";
+
         await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
           'name': name,
           'step': 0,
           'totalStep': 0,
+          'currentDate': date,
         });
         Navigator.pop(context);
         Navigator.pushNamed(context, '/pedometer');

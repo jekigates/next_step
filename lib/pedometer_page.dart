@@ -53,9 +53,28 @@ class _PedometerPageState extends State<PedometerPage> {
           .doc(user.uid)
           .get();
       if (userData.exists) {
+        final currentDate =
+            DateTime.now().toLocal().toString().substring(0, 10);
+        final firebaseDate = userData.get('currentDate');
+        if (firebaseDate != currentDate) {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .update({
+            'step': 0,
+            'totalStep': 0,
+            'currentDate': currentDate,
+          });
+          setState(() {
+            _stepsCount = 0;
+          });
+        } else {
+          setState(() {
+            _stepsCount = userData.get('step');
+          });
+        }
         setState(() {
           _user = user;
-          _stepsCount = userData.get('step');
         });
         print('Name: ${userData.get('name')}');
         print('Email: ${_user!.email}');
