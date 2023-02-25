@@ -4,6 +4,7 @@ import 'package:sensors/sensors.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PedometerPage extends StatefulWidget {
   @override
@@ -62,7 +63,6 @@ class _PedometerPageState extends State<PedometerPage> {
               .doc(user.uid)
               .update({
             'step': 0,
-            'totalStep': 0,
             'currentDate': currentDate,
           });
           setState(() {
@@ -91,10 +91,45 @@ class _PedometerPageState extends State<PedometerPage> {
   void _updateUserStepCount() async {
     var user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      await FirebaseFirestore.instance
+      // Get the user's data from Firebase
+      final userData = await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
-          .update({'step': _stepsCount});
+          .get();
+      if (userData.exists) {
+        // Get the user's local date
+        final currentDate = DateTime.now();
+        final currentDateString =
+            '${currentDate.year}-${currentDate.month}-${currentDate.day}';
+
+        // Get the user's Firebase date
+        final firebaseDateString = userData.get('currentDate');
+
+        // Check if the dates are different
+        if (currentDateString != firebaseDateString) {
+          // Reset the step count
+          _stepsCount = 0;
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .update({
+            'step': 0,
+            'currentDate': currentDateString,
+          });
+          // Show a notification
+          Fluttertoast.showToast(
+            msg: 'Your step count has been reset to 0 because day changed',
+            gravity: ToastGravity.TOP,
+            backgroundColor: Colors.red,
+          );
+        }
+
+        // Update the user's step count in Firebase
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .update({'step': _stepsCount});
+      }
     }
   }
 
