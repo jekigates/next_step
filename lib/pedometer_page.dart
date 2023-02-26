@@ -13,7 +13,8 @@ class PedometerPage extends StatefulWidget {
 
 class _PedometerPageState extends State<PedometerPage> {
   // Deklarasikan variabel untuk menyimpan jumlah langkah yang diambil
-  int _stepsCount = 0;
+  int _totalStepsCount = 0;
+  int _stepsCount = 0; // used to load user's step in firebase too
   User? _user;
 
   // Inisialisasi plugin notifikasi
@@ -40,7 +41,13 @@ class _PedometerPageState extends State<PedometerPage> {
       setState(() {
         if (event.y > 11.0) {
           _stepsCount++;
+          _totalStepsCount++;
           _updateUserStepCount();
+
+          // Check if the number of steps is a multiple of 100
+          if (_stepsCount % 100 == 0) {
+            _sendNotification();
+          }
         }
       });
     });
@@ -75,6 +82,7 @@ class _PedometerPageState extends State<PedometerPage> {
         }
         setState(() {
           _user = user;
+          _totalStepsCount = userData.get('totalStep');
         });
       }
     } else {
@@ -114,13 +122,12 @@ class _PedometerPageState extends State<PedometerPage> {
             gravity: ToastGravity.TOP,
             backgroundColor: Colors.red,
           );
+        } else {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .update({'step': _stepsCount, 'totalStep': _totalStepsCount});
         }
-
-        // Update the user's step count in Firebase
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .update({'step': _stepsCount});
       }
     }
   }
@@ -224,6 +231,7 @@ class _PedometerPageState extends State<PedometerPage> {
                       },
                       child: Text('Logout'),
                     ),
+                    Text('Total Step All Time: ${_totalStepsCount}')
                   ],
                 ),
               )
