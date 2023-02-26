@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class PedometerPage extends StatefulWidget {
   @override
@@ -162,84 +163,171 @@ class _PedometerPageState extends State<PedometerPage> {
         body: _user != null
             ? Center(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: _circleSize,
-                      height: _circleSize,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.black),
+                    SizedBox(height: 50),
+                    Image.asset(
+                      'assets/images/logo.png', // replace with your image path
+                      width: 80, // adjust the size as needed
+                    ),
+                    SizedBox(height: 20),
+                    Container(
+                      width: double.infinity,
+                      height: 360,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/background.png'),
+                          fit: BoxFit.cover,
                         ),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '$_stepsCount',
-                                style: TextStyle(fontSize: 24),
-                              ),
-                              Text(
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Opacity(
+                              opacity: 0.5,
+                              child: Text(
                                 'STEP',
-                                style: TextStyle(fontSize: 16),
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white),
                               ),
-                            ],
-                          ),
+                            ),
+                            Text(
+                              '$_stepsCount',
+                              style:
+                                  TextStyle(fontSize: 50, color: Colors.white),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Panggil method untuk mengirim notifikasi di sini
-                        _sendNotification();
-                      },
-                      child: Text('Test Notification'),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.black),
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.black),
-                      ),
-                      onPressed: () {
-                        // Tampilkan dialog konfirmasi logout
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('Logout'),
-                              content: Text('Are you sure you want to logout?'),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text('Cancel'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: Color(0xFFF0BE15),
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/fire.svg',
+                                  color: Color(0xFFF0BE15),
+                                  height: 15,
+                                  width: 15,
                                 ),
-                                TextButton(
-                                  child: Text('Logout'),
-                                  onPressed: () async {
-                                    // Logout dari firebase
-                                    await FirebaseAuth.instance.signOut();
-                                    // Redirect ke halaman login
-                                    Navigator.pop(context);
-                                    Navigator.pushNamed(context, '/');
-                                  },
+                                SizedBox(width: 5),
+                                Text(
+                                  '${(_stepsCount / 1300 * 60).toStringAsFixed(0)}cal',
+                                  style: TextStyle(color: Color(0xFFF0BE15)),
                                 ),
                               ],
-                            );
-                          },
-                        );
-                      },
-                      child: Text('Logout'),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.black),
+                            ),
+                            onPressed: () {
+                              // Tampilkan dialog konfirmasi logout
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Logout'),
+                                    content: Text(
+                                        'Are you sure you want to logout?'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Opacity(
+                                          opacity: 0.5,
+                                          child: Text(
+                                            'Cancel',
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text(
+                                          'Logout',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                        onPressed: () async {
+                                          // Logout dari firebase
+                                          await FirebaseAuth.instance.signOut();
+                                          // Redirect ke halaman login
+                                          Navigator.pop(context);
+                                          Navigator.pushNamed(context, '/');
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: Text('Logout'),
+                          ),
+                        ),
+                      ],
                     ),
-                    Text('Total Step All Time: ${_totalStepsCount}')
+                    Container(
+                      width: double.infinity,
+                      height: 200,
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/walking.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Walking',
+                              style:
+                                  TextStyle(fontSize: 32, color: Colors.white),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Walking is a great way to improve or maintain your overall health. Just 30 minutes every day can increase cardiovascular fitness, strengthen bones, reduce excess body fat, and boost muscle power and endurance. It can also reduce your risk of developing conditions such as heart disease, type 2 diabetes, osteoporosis and some cancers. Unlike some other forms of exercise, walking is free and doesn’t require any special equipment or training. ',
+                              style: TextStyle(
+                                  fontSize: 10, color: Color(0xFFC2C2C2)),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Copyright © 2023 by Jeki Gates',
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Text('Total Step All Time: ${_totalStepsCount}')
                   ],
                 ),
               )
