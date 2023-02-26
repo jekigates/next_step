@@ -92,15 +92,28 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: 50),
                   // Email input with label and rounded corners
+                  SizedBox(
+                    height: 20,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Your email address",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Color(0xFFE5E5E5),
+                        width: 1,
                       ),
-                      color: Colors.grey[200],
                     ),
                     child: TextField(
                       controller: emailController,
@@ -110,16 +123,34 @@ class _LoginPageState extends State<LoginPage> {
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         hintText: 'example@gmail.com',
-                        labelText: 'Your email address',
+                        hintStyle: TextStyle(color: Color(0xFF6B6B6B)),
                       ),
                     ),
                   ),
                   SizedBox(height: 20),
                   // Password input with label and rounded corners
+                  SizedBox(
+                    height: 20,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Your password",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.grey[200],
+                      border: Border.all(
+                        color: Color(0xFFE5E5E5),
+                        width: 1,
+                      ),
                     ),
                     child: TextField(
                       controller: passwordController,
@@ -129,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         hintText: '********',
-                        labelText: 'Your password',
+                        hintStyle: TextStyle(color: Color(0xFF6B6B6B)),
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -157,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                         bottomLeft: Radius.circular(20),
                         bottomRight: Radius.circular(20),
                       ),
-                      color: Colors.blue,
+                      color: Colors.black,
                     ),
                     child: TextButton(
                       onPressed: () {
@@ -179,8 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(
                       "Don't have an account? Create one",
                       style: TextStyle(
-                        color: Colors.blue,
-                        decoration: TextDecoration.underline,
+                        color: Colors.black,
                       ),
                     ),
                   ),

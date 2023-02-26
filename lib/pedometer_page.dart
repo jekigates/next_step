@@ -196,9 +196,17 @@ class _PedometerPageState extends State<PedometerPage> {
                         _sendNotification();
                       },
                       child: Text('Test Notification'),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.black),
+                      ),
                     ),
                     SizedBox(height: 16),
                     ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.black),
+                      ),
                       onPressed: () {
                         // Tampilkan dialog konfirmasi logout
                         showDialog(
