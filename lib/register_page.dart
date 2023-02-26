@@ -113,13 +113,19 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(height: 100),
-                  Text(
-                    'Register NextStep!',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  Image.asset(
+                    'assets/images/logo.png', // replace with your image path
+                    width: 120, // adjust the size as needed
                   ),
-                  SizedBox(height: 50),
-
+                  SizedBox(height: 20),
+                  Text(
+                    "Walk for health.",
+                    style: TextStyle(
+                      color: Color(0xff6a6a6a),
+                      fontSize: 14,
+                    ),
+                  ),
+                  SizedBox(height: 40),
                   // Name input with label and rounded corners
                   SizedBox(
                     height: 20,
@@ -261,7 +267,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         register();
                       },
                       child: Text(
-                        'REGISTER',
+                        'Register',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
